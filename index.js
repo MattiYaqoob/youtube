@@ -4,22 +4,29 @@ const app = express();
 const port = process.env.PORT || 3000;
 
 
-const streamKey = "jfw6-tfhq-gdmy-7buf-ebtj";
-const streamURL = `rtmp://a.rtmp.youtube.com/live2/${streamKey}`;
+const streamKey = "utuu-gbub-vt43-kgcj-d2f4";
 
 
-const ffmpegPath = `"C:\\Users\\matis\\Downloads\\ffmpeg-8.0-essentials_build\\bin\\ffmpeg.exe"`;
+const streamURL = `rtmps://a.rtmp.youtube.com/live2/${streamKey}`;
 
 
-exec(`${ffmpegPath} -f lavfi -i color=c=black:s=1280x720:r=30 -f flv "${streamURL}"`, (err, stdout, stderr) => {
-  if (err) console.error("❌ Not working ffmpeg:", err);
+const ffmpegPath = `"C:\\ffmpeg\\bin\\ffmpeg.exe"`;
+
+const ffmpegCommand = `${ffmpegPath} -f lavfi -i testsrc=size=1280x720:rate=30 -f lavfi -i sine=frequency=1000 -c:v libx264 -preset veryfast -b:v 2500k -c:a aac -b:a 128k -ar 44100 -f flv "${streamURL}"`;
+
+
+const ffmpegProcess = exec(ffmpegCommand, (err, stdout, stderr) => {
+  if (err) {
+    console.error("❌ FFmpeg error:", err);
+    return;
+  }
   console.log(stdout, stderr);
 });
 
 app.get('/', (req, res) => {
-  res.send('<h1>✅ Server works on YouTube</h1>');
+  res.send('<h1>✅ Server is running and streaming to YouTube</h1>');
 });
 
 app.listen(port, () => {
-  console.log(`Server running on port ${port}`);
+  console.log(`🚀 Server running on port ${port}`);
 });
