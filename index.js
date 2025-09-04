@@ -1,18 +1,25 @@
 const express = require('express');
+const { exec } = require('child_process');
 const app = express();
 const port = process.env.PORT || 3000;
 
-// Route بسيط يرجع JSON
-app.get('/api/hello', (req, res) => {
-  res.json({ message: 'مرحبا من الـ Backend على Render 🚀' });
+
+const streamKey = "jfw6-tfhq-gdmy-7buf-ebtj";
+const streamURL = `rtmp://a.rtmp.youtube.com/live2/${streamKey}`;
+
+
+const ffmpegPath = `"C:\\Users\\matis\\Downloads\\ffmpeg-8.0-essentials_build\\bin\\ffmpeg.exe"`;
+
+
+exec(`${ffmpegPath} -f lavfi -i color=c=black:s=1280x720:r=30 -f flv "${streamURL}"`, (err, stdout, stderr) => {
+  if (err) console.error("❌ Not working ffmpeg:", err);
+  console.log(stdout, stderr);
 });
 
-// Route للصفحة الرئيسية
 app.get('/', (req, res) => {
-  res.send('<h1>✅ السيرفر يعمل بنجاح!</h1>');
+  res.send('<h1>✅ Server works on YouTube</h1>');
 });
 
-// تشغيل السيرفر
 app.listen(port, () => {
-  console.log(`✅ Server running on port ${port}`);
+  console.log(`Server running on port ${port}`);
 });
