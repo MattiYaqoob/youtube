@@ -8,7 +8,8 @@ const streamKey = "utuu-gbub-vt43-kgcj-d2f4";
 const streamURL = `rtmps://a.rtmp.youtube.com/live2/${streamKey}`;
 
 
-const ffmpegCommand = `ffmpeg -f lavfi -i color=c=black:s=1280x720:r=30"${streamURL}"`;
+const ffmpegCommand = `${ffmpegPath} -f lavfi -i color=c=black:s=1280x720:r=30 -c:v libx264 -preset veryfast -b:v 2500k -an -f flv "${streamURL}"`;
+
 
 exec(ffmpegCommand, (err, stdout, stderr) => {
   if (err) {
