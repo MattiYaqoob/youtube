@@ -1,0 +1,7 @@
+services:
+  - type: web
+    name: youtube-stream
+    env: node
+    plan: free
+    buildCommand: "./render-build.sh && npm install"
+    startCommand: "npm start"
